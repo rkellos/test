@@ -1,0 +1,545 @@
+
+> @careerbuilder/consumer-services-middleware@4.0.0 test /Users/dev/src/consumer-services-middleware
+> ./test.sh
+
+
+
+  RouteAuthenticatorFactory
+    #getRouteAuthenticator
+      AUTH not set to anything
+        ✓ throws an error
+      AUTH set to something other than an available option
+        ✓ throws an error
+      AUTH set to none option
+        ✓ returns NoAuthRouteAuthenticator
+      jwt
+        ✓ returns JWTRouteAuthenticator
+      AUTH configured to header_key_value
+        ✓ returns HeaderKeyValueRouteAuthenticator
+      AUTH configured to HeAdeR_KeY_ValUe
+        ✓ returns HeaderKeyValueRouteAuthenticator
+
+  ErrorHandler
+Error: {}
+Error Stack: Error: FooBar
+    at Context.<anonymous> (/Users/dev/src/consumer-services-middleware/test/middleware/error_handler_tests.js:18:18)
+    at callFnAsync (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runnable.js:368:21)
+    at Test.Runnable.run (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runnable.js:318:7)
+    at Runner.runTest (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:444:10)
+    at /Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:550:12
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:361:14)
+    at /Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:371:7
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:295:14)
+    at /Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:334:7
+    at done (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runnable.js:295:5)
+    at callFn (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runnable.js:363:7)
+    at Hook.Runnable.run (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runnable.js:337:7)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:309:10)
+    at Immediate.<anonymous> (/Users/dev/src/consumer-services-middleware/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:666:20)
+    at tryOnImmediate (timers.js:639:5)
+    at processImmediate [as _immediateCallback] (timers.js:611:5)
+    ✓ unhandled exception without status code is set as an internal server error
+Error: {"statusCode":413}
+Error Stack: Unavailable
+    ✓ unhandled exception with statusCode
+Error: {"statusCode":413,"message":"test","reasonPhrase":"testReason"}
+Error Stack: Unavailable
+    ✓ unhandled exception with statusCode, message, reasonPhrase
+Error: {"reasonPhrase":"BadRequest","message":"BadRequest","statusCode":400}
+Error Stack: Unavailable
+    ✓ BaseHttpError with specific status and message is propogated to the response
+Error: {"reasonPhrase":"","message":"","statusCode":500}
+Error Stack: Unavailable
+    ✓ BaseHttpError with no message and status code defaults to an empty 500
+
+  Forensics
+    enabled
+      ✓ calling setForensics sets foo
+      ✓ setForensics overrides existing key if called twice
+    disabled
+      ✓ calling setForensics does nothing
+
+  RequestTimer
+    getTimingInfo
+      ✓ function is added to response object
+      in a time bubble
+        ✓ calculates timing info properly
+
+  ResponseBuilder
+    errors
+Response: {"errors":[{"type":"BadRequest","message":"BadRequest","code":400}],"forensics":[],"timing":{"time_received":"1970-01-01T00:00:00.000Z","time_elapsed_milliseconds":100},"data":null}
+      ✓ response is a properly formed BadRequest-400
+      with forensics
+Response: {"errors":[{"type":"BadRequest","message":"BadRequest","code":400}],"forensics":[{"foo":"bar"},{"bam":"boom"}],"timing":{"time_received":"1970-01-01T00:00:00.000Z","time_elapsed_milliseconds":100},"data":null}
+        ✓ response is a properly formed BadRequest-400
+      no timing info
+Response: {"errors":[{"type":"BadRequest","message":"BadRequest","code":400}],"forensics":[],"timing":{"time_received":"unknown","time_elapsed_milliseconds":"unknown"},"data":null}
+        ✓ response has timing info as unknown
+    no errors
+      data present
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"1970-01-01T00:00:00.000Z","time_elapsed_milliseconds":100},"data":{"foo":"bar"}}
+        ✓ response is properly formed Success-200
+        with forensics
+Response: {"errors":[],"forensics":[{"foo":"bar"},{"bam":"boom"}],"timing":{"time_received":"1970-01-01T00:00:00.000Z","time_elapsed_milliseconds":100},"data":{"foo":"bar"}}
+          ✓ response is properly formed Success-200
+      data not present
+Response: {"errors":[{"type":"NotFound","message":"NotFound","code":404}],"forensics":[],"timing":{"time_received":"1970-01-01T00:00:00.000Z","time_elapsed_milliseconds":100},"data":null}
+        ✓ response is a properly formed Not Found-404
+      with no timing info
+        data present
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"unknown","time_elapsed_milliseconds":"unknown"},"data":{"foo":"bar"}}
+          ✓ response is properly formed Success-200
+        data not present
+Response: {"errors":[{"type":"NotFound","message":"NotFound","code":404}],"forensics":[],"timing":{"time_received":"unknown","time_elapsed_milliseconds":"unknown"},"data":null}
+          ✓ response is a properly formed Not Found-404
+
+  HeaderKeyValueRouteAuthenticator
+    #CTOR
+      No logger provided
+        ✓ expect error to be thrown
+      logger provided
+        AUTH_HEADER_KEY not provided
+          ✓ expect error to be thrown
+        AUTH_HEADER_VALUE not provided
+          ✓ expect error to be thrown
+    #authenticate
+      ✓ Request has valid auth headers
+      ✓ Request has invalid auth headers
+
+  JWTRouteAuthenticator
+    #CTOR
+      No logger provided
+        ✓ expect error to be thrown
+      Required environment variables are checked
+        JWT_PUBLIC_KEY not set
+          ✓ Logged and an InternalServerError is thrown
+        JWT_ISSUER not set
+          ✓ Logged and an InternalServerError is thrown
+        JWT_AUDIENCE not set
+          ✓ Logged and an InternalServerError is thrown
+    method calls
+      #authenticate
+        Passport Authentication
+          authorized
+            ✓ calls return handler with req, res, next args
+          legitimate unauthorized
+            ✓ logs passport info
+            ✓ expect passport authenticate to be called with the jwt strategy
+            ✓ returns an Unauthorized BaseHttpError
+          unexpected error
+            ✓ expect passport authenticate to be called with the jwt strategy
+            ✓ logs passport error
+            ✓ returns an InternalServerError BaseHttpError (49ms)
+
+  NoAuthRouteAuthenticator
+    #CTOR
+      no logger provided
+        ✓ expect error to be thrown
+    #authenticate
+      ✓ logs properly
+
+  VersionParser
+    accept header is empty
+      ✓ should default to 1.0
+    with version specified in accept header
+      ✓ it should return version specified
+    with content type and version specified in accept header
+      ✓ returns version specified properly
+
+  Middleware Tests
+    REQUEST_SIZE_LIMIT set
+REQUEST_SIZE_LIMIT set to: 1000kb
+      ✓ should set body parser (44ms)
+    REQUEST_SIZE_LIMIT is not set
+      ✓ should set body parser
+    Undefined routes
+call-source header: undefined
+No datadog metrics sent. Request did not match a route.
+No datadog metrics sent. Request did not match a route.
+Response: {"errors":[{"type":"NotFound","message":"NotFound","code":404}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.000Z","time_elapsed_milliseconds":1},"data":null}
+[0mGET /banana [33m404 [0m10.884 ms - 175[0m
+      ✓ Should respond with 404 for /banana (72ms)
+    Unauthenticated routes
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.042Z","time_elapsed_milliseconds":1},"data":"OK"}
+[0mGET /status [32m200 [0m2.631 ms - 124[0m
+      ✓ Should respond with 200 OK for /status
+      Error Handling
+call-source header: undefined
+Error: {}
+Error Stack: Error: UnhandledException
+    at /Users/dev/src/consumer-services-middleware/test/middleware_test.js:38:15
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at VersionParser (/Users/dev/src/consumer-services-middleware/middleware/version_parser.js:5:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at requestTimer (/Users/dev/src/consumer-services-middleware/middleware/request_timer.js:14:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at callSourceLogger (/Users/dev/src/consumer-services-middleware/middleware/call_source_logger.js:3:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at forensics (/Users/dev/src/consumer-services-middleware/middleware/forensics.js:25:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at jsonParser (/Users/dev/src/consumer-services-middleware/node_modules/body-parser/lib/types/json.js:103:7)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at logger (/Users/dev/src/consumer-services-middleware/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:174:3)
+    at router (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:47:12)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at expressInit (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at query (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/middleware/query.js:44:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:174:3)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/application.js:174:10)
+    at Server.app (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/express.js:38:9)
+    at emitTwo (events.js:106:13)
+    at Server.emit (events.js:194:7)
+    at parserOnIncoming (_http_server.js:565:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:99:23)
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"InternalServerError","message":"InternalServerError","code":500}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.062Z","time_elapsed_milliseconds":2},"data":null}
+[0mGET /unhandled_exception [31m500 [0m2.872 ms - 197[0m
+        ✓ Unhandled Exceptions should be a 500 internal server error
+call-source header: undefined
+Error: {"reasonPhrase":"BadRequest","message":"BadRequest","statusCode":400}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"BadRequest","message":"BadRequest","code":400}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.078Z","time_elapsed_milliseconds":1},"data":null}
+[0mGET /handled_exception [33m400 [0m1.421 ms - 179[0m
+        ✓ Handled Exceptions should return designated http status code and information
+    Authenticated routes
+      Asymmetric JWT auth
+call-source header: undefined
+Info: Passport authentication unauthorized. AuthInfo: {}
+Error: {"reasonPhrase":"Unauthorized","message":"Unauthorized","statusCode":401}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"Unauthorized","message":"Unauthorized","code":401}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.110Z","time_elapsed_milliseconds":3},"data":null}
+[0mPOST /auth/bounce [33m401 [0m6.429 ms - 183[0m
+        ✓ Should return Unauthorized without proper headers
+call-source header: undefined
+Info: Passport authentication unauthorized. AuthInfo: {"name":"JsonWebTokenError","message":"jwt malformed"}
+Error: {"reasonPhrase":"Unauthorized","message":"Unauthorized","statusCode":401}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"Unauthorized","message":"Unauthorized","code":401}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.131Z","time_elapsed_milliseconds":47},"data":null}
+[0mPOST /auth/bounce [33m401 [0m48.166 ms - 184[0m
+        ✓ Should return Unauthorized with a bad token value (61ms)
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.195Z","time_elapsed_milliseconds":5},"data":{"foo":"bar"}}
+[0mPOST /auth/bounce [32m200 [0m6.373 ms - 133[0m
+        ✓ Should return with success with proper headers
+        Error Handling
+call-source header: undefined
+Error: {}
+Error Stack: Error: UnhandledException
+    at /Users/dev/src/consumer-services-middleware/test/middleware_test.js:52:15
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:137:13)
+    at /Users/dev/src/consumer-services-middleware/middleware/route_authenticators/jwt_route_authenticator.js:33:16
+    at JwtStrategy.strategy.success (/Users/dev/src/consumer-services-middleware/node_modules/passport/lib/middleware/authenticate.js:201:18)
+    at verified (/Users/dev/src/consumer-services-middleware/node_modules/passport-jwt/lib/strategy.js:102:33)
+    at JwtStrategy._verify (/Users/dev/src/consumer-services-middleware/middleware/route_authenticators/jwt_route_authenticator.js:19:5)
+    at /Users/dev/src/consumer-services-middleware/node_modules/passport-jwt/lib/strategy.js:110:26
+    at /Users/dev/src/consumer-services-middleware/node_modules/jsonwebtoken/verify.js:27:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"InternalServerError","message":"InternalServerError","code":500}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.212Z","time_elapsed_milliseconds":1},"data":null}
+[0mPOST /auth/unhandled_exception [31m500 [0m2.339 ms - 197[0m
+          ✓ Unhandled Exceptions should be a 500 internal server error
+call-source header: undefined
+Error: {"reasonPhrase":"PaymentRequired","message":"PaymentRequired","statusCode":402}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"PaymentRequired","message":"PaymentRequired","code":402}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.227Z","time_elapsed_milliseconds":1},"data":null}
+[0mPOST /auth/handled_exception [33m402 [0m1.447 ms - 189[0m
+          ✓ Handled Exceptions should return designated http status code and information
+      legacy header_key_value auth
+call-source header: undefined
+Error: {"reasonPhrase":"Unauthorized","message":"Unauthorized","statusCode":401}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"Unauthorized","message":"Unauthorized","code":401}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.239Z","time_elapsed_milliseconds":1},"data":null}
+[0mPOST /auth/bounce [33m401 [0m5.752 ms - 183[0m
+        ✓ Should return Unauthorized without proper headers
+call-source header: undefined
+/auth/bounce Route authenticated
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.256Z","time_elapsed_milliseconds":1},"data":{"foo":"bar"}}
+[0mPOST /auth/bounce [32m200 [0m1.790 ms - 133[0m
+        ✓ Should return with success with proper headers
+        Error Handling
+call-source header: undefined
+/auth/unhandled_exception Route authenticated
+Error: {}
+Error Stack: Error: UnhandledException
+    at /Users/dev/src/consumer-services-middleware/test/middleware_test.js:52:15
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:137:13)
+    at HeaderKeyValueRouteAuthenticator._self.authenticate (/Users/dev/src/consumer-services-middleware/middleware/route_authenticators/header_key_value_route_authenticator.js:17:14)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at VersionParser (/Users/dev/src/consumer-services-middleware/middleware/version_parser.js:5:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at requestTimer (/Users/dev/src/consumer-services-middleware/middleware/request_timer.js:14:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at callSourceLogger (/Users/dev/src/consumer-services-middleware/middleware/call_source_logger.js:3:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at forensics (/Users/dev/src/consumer-services-middleware/middleware/forensics.js:25:3)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at jsonParser (/Users/dev/src/consumer-services-middleware/node_modules/body-parser/lib/types/json.js:112:7)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at logger (/Users/dev/src/consumer-services-middleware/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:174:3)
+    at router (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:47:12)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at expressInit (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at query (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/middleware/query.js:44:5)
+    at Layer.handle [as handle_request] (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:317:13)
+    at /Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/router/index.js:174:3)
+    at Function.handle (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/application.js:174:10)
+    at Server.app (/Users/dev/src/consumer-services-middleware/node_modules/express/lib/express.js:38:9)
+    at emitTwo (events.js:106:13)
+    at Server.emit (events.js:194:7)
+    at parserOnIncoming (_http_server.js:565:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:99:23)
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"InternalServerError","message":"InternalServerError","code":500}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.265Z","time_elapsed_milliseconds":1},"data":null}
+[0mPOST /auth/unhandled_exception [31m500 [0m1.776 ms - 197[0m
+          ✓ Unhandled Exceptions should be a 500 internal server error
+call-source header: undefined
+/auth/handled_exception Route authenticated
+Error: {"reasonPhrase":"PaymentRequired","message":"PaymentRequired","statusCode":402}
+Error Stack: Unavailable
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[{"type":"PaymentRequired","message":"PaymentRequired","code":402}],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.278Z","time_elapsed_milliseconds":0},"data":null}
+[0mPOST /auth/handled_exception [33m402 [0m1.021 ms - 189[0m
+          ✓ Handled Exceptions should return designated http status code and information
+    Versioning
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.292Z","time_elapsed_milliseconds":0},"data":"OKV2"}
+[0mGET /status [32m200 [0m1.018 ms - 126[0m
+      ✓ Should have version 2.0 set on request
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.300Z","time_elapsed_milliseconds":0},"data":"OK"}
+[0mGET /status [32m200 [0m2.117 ms - 124[0m
+      ✓ Should default to 1.0 set on request
+    Forensics
+      Versioning
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[],"timing":{"time_received":"2017-03-15T12:36:32.313Z","time_elapsed_milliseconds":1},"data":"OKV2"}
+[0mGET /status [32m200 [0m0.889 ms - 126[0m
+        ✓ Should be none when not in query string
+call-source header: undefined
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+No datadog metrics sent. Check env.STACK_NAME, env.NODE_ENV are set.
+env.STACK_NAME: undefined
+env.NODE_ENV: undefined
+
+Response: {"errors":[],"forensics":[{"version":"2.0"}],"timing":{"time_received":"2017-03-15T12:36:32.327Z","time_elapsed_milliseconds":0},"data":"OKV2"}
+[0mGET /status?forensics=on [32m200 [0m1.229 ms - 143[0m
+        ✓ Should have version
+
+
+  64 passing (815ms)
+
