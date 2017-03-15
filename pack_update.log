@@ -1,0 +1,16 @@
+Found package.json.
+Dependencies:
+ Kept:   @careerbuilder/consumer-datadog  at  ^2.0.0  
+ Kept:   body-parser                      at  ^1.17.1 
+ Kept:   express                          at  ^4.15.2 
+ Kept:   morgan                           at  ^1.8.1  
+ Kept:   passport                         at  ^0.3.2  
+ Kept:   passport-jwt                     at  ^2.2.1  
+Development Dependencies:
+ Kept:   expect.js   at  ^0.3.1  
+ Kept:   mocha       at  ^3.2.0  
+ Kept:   proxyquire  at  ^1.7.11 
+ Kept:   sinon       at  ^2.0.0  
+ Kept:   supertest   at  ^3.0.0  
+Peer Dependencies:
+ None found 
