@@ -24,6 +24,8 @@ if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
   eval "$(rbenv init -)"
 fi
 
+
+
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
@@ -35,13 +37,7 @@ fi
 # Load Android sdk
 export ANDROID_SDK_ROOT="/Users/rkellos/Library/Developer/Xamarin/android-sdk-macosx"
 # set dev directory for ios projects
-export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
-
-# Git branch in prompt.
-
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
+export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
 
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
@@ -97,7 +93,6 @@ export ANDROID_HOME="/Users/rkellos/Library/Developer/Xamarin/android-sdk-macosx
 #export ANDROID_HOME=$HOME/Downloads/android-sdk-macosx
 export JAVA_HOME="`/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java_home`"
 
-
 export ANDROID_SDK=$ANDROID_HOME
 PATH=$PATH:/usr/local/share/npm/bin
 PATH=$PATH:$ANDROID_HOME/build-tools
@@ -106,13 +101,14 @@ PATH=$PATH:$ANDROID_HOME/tools
 export PATH
 
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-export PATH="$HOME/.fastlane/bin:$PATH
+
+export PATH="$HOME/.fastlane/bin:$PATH"
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 
-  set process.env.JWT_PUBLIC_KEY = "-----BEGIN RSA PUBLIC KEY-----
+set process.env.JWT_PUBLIC_KEY = "-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEAsSXMR/u87eZf8lorRGgTAz50BBrkG4QwirSWXcPqhw/uDljRzelL
 fUaB3ZGIMbpCD/ue7o9alzgPdfa55ibBdVUR5DOPP+FZGiraQr5xGS8YwhF1gbbz
 MkeDM/DxrZEeUPQhYJk2XzvcWfCU4XdcAD5PYCujFr124zIvrWP60WR2/wileRsZ
@@ -130,6 +126,7 @@ set process.env.AUTH_HEADER_VALUE = ""
 
 # quick-start of chassis app [temp]
 alias chassis-start="AUTh=none npm start bin/www";
+
 
 #   -----------------------------
 #   2.  MAKE TERMINAL BETTER
@@ -201,13 +198,15 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cd-dl="cd ~/Downloads"
 alias cd-dt="cd ~/Desktop"
-alias cd-temp="cd /Users/temp"
 
 
-
-
-alias cd-user="~; ls"
-
+# common cb directories (src)
+alias cd-dev="cd /Users/dev"
+alias cd-utils="cd /Users/utils"
+alias cd-src="cd /Users/dev/src"
+alias cd-conmain="cd /Users/dev/src/consumer-main"
+alias cd-condom="cd /Users/dev/src/consumer-domain"
+alias cd-user="~"
 
 alias c='clear'                             # c:            Clear terminal display
 alias cls='clear'
@@ -221,10 +220,6 @@ alias cic='set completion-ignore-case On'   # cic:          Make tab-completion 
 alias reload='source ~/.bash_profile; cls;'
 alias reloadx="exec $SHELL -l"
 
-
-
-alias cd-src="cd /Volumes/Data/src"
-alias cd-edu="cd /Volumes/Data/edu"
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
 # File size
@@ -453,6 +448,11 @@ alias undo-push="git push -f origin HEAD^:master"
 
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`' # `cd` to Git repo root
 alias g-root=gr
+
+# Git branch in prompt.
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
