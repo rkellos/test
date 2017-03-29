@@ -59,6 +59,7 @@ parse_git_branch() {
 # * ~/.extra can be used for other settings you don’t want to commit.
 
 source ~/.bash_prompt
+source $HOME/bash_completion.d/gradle-completion.bash
 source ~/.shell_functions
 source ~/.gitattributes
 
@@ -66,6 +67,7 @@ for file in ~/.{bash_prompt}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+
 
 #   Set Paths
 #   ------------------------------------------------------------
@@ -104,7 +106,8 @@ PATH=$PATH:$ANDROID_HOME/tools
 export PATH
 
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" #command CC=$(xcrun -f --sdk macos clang)
+export PATH="$HOME/.fastlane/bin:$PATH
+
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
@@ -120,6 +123,7 @@ bS/V2K/ouXVPjhWP2Oeh9qGdQ8gI+c6uDQIDAQAB
 
 set process.env.JWT_ISSUER = "staging"
 set process.env.JWT_AUDIENCE = "consumer"
+
 # set by request
 set process.env.AUTH_HEADER_KEY = ""
 set process.env.AUTH_HEADER_VALUE = ""
@@ -199,12 +203,9 @@ alias cd-dl="cd ~/Downloads"
 alias cd-dt="cd ~/Desktop"
 alias cd-temp="cd /Users/temp"
 
-alias cd-dev="cd /Users/dev; ls"
-alias cd-utils="cd /Users/dev/utils; ls"
-alias cd-src="cd /Users/dev/src; ls"
-alias cd-conmain="cd /Users/dev/src/consumer-main; ls"
-alias cd-condom="cd /Users/dev/src/consumer-domain; ls"
-alias cd-dl="cd ~/Downloads; ls"
+
+
+
 alias cd-user="~; ls"
 
 
@@ -220,6 +221,10 @@ alias cic='set completion-ignore-case On'   # cic:          Make tab-completion 
 alias reload='source ~/.bash_profile; cls;'
 alias reloadx="exec $SHELL -l"
 
+
+
+alias cd-src="cd /Volumes/Data/src"
+alias cd-edu="cd /Volumes/Data/edu"
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
 # File size
