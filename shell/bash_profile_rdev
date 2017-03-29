@@ -26,10 +26,9 @@ fi
 
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
-#export NVM_DIR="~/.nvm"
+
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 npm config delete prefix
-#export NVM_DIR="$HOME/.nvm" . "/usr/local/opt/nvm/nvm.sh"
 
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
@@ -126,6 +125,9 @@ set process.env.JWT_AUDIENCE = "consumer"
 set process.env.AUTH_HEADER_KEY = ""
 set process.env.AUTH_HEADER_VALUE = ""
 
+# quick-start of chassis app [temp]
+alias chassis-start="AUTh=none npm start bin/www";
+
 #   -----------------------------
 #   2.  MAKE TERMINAL BETTER
 #   -----------------------------
@@ -191,6 +193,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
 
+# common cb directories (src)
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cd-dl="cd ~/Downloads"
