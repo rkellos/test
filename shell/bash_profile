@@ -235,11 +235,21 @@ alias diskspace_report="df -P -kHl"
 alias free_diskspace_report="diskspace_report"
 
 # package lists
-#alias npm-list-old="cd ~; echo npm -gdls ll > npm-g-list && npm -gdls ll >> npm-g-list"
-alias npm-list="~; echo npm -gdls ll > ~/npm-g-list && npm -gdls ll | tee -a ~/npm-g-list;"
-alias brew-list="~; echo brew ls --full-name --mulitple --versions > ~/brew-list && brew ls --full-name --mulitple --versions  | tee -a ~/brew-list;"
-alias gem-list="~; echo gem list -daV > ~/gem-list && gem list -daV >> ~/gem-list"
+alias brew-bundle-check="brew bundle check --global -v | tee ~/brew-bundle-check"
+alias brew-bundle-refresh="brew bundle --global -v | tee ~/brew-bundle-refresh"
+alias brew-bundle-gen="brew bundle dump --force -v; cat ~/Brewfile"
+alias brew-bundle-update="brew bundle --global -v --force | tee ~/brew-bundle-update"
 
+alias brew-list="echo '--> brew bundle dump --force -v --global'; brew bundle dump --force -v --global | pv -C; echo;echo '--> brew ls --full-name --mulitple --versions' | tee ~/brew-list; brew ls --full-name --mulitple --versions | pv -C | tee -a ~/brew-list;echo"
+alias npm-list="echo '--> npm -gdls ll' | tee ~/npm-g-list; npm -gdls ll | pv -C | tee -a ~/npm-g-list;echo"
+alias gem-list="echo '--> gem list -daV' | tee ~/gem-list; gem list -daV | pv -C | tee -a ~/gem-list;echo"
+alias pip-list="echo '--> pip list -lv --format columns' | tee ~/pip-list; pip list -lv --format columns | pv -C | tee -a ~/pip-list;echo"
+
+alias package-lists="echo 'all lists...'; echo; brew-list; npm-list; gem-list; pip-list; echo;echo '--> all lists done |<--';echo;"
+alias packages="package-lists"
+alias lists="package-lists"
+
+#file listing
 alias l="ls -lF ${colorflag}" # List all files colorized in long format
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'" # List only directories
 alias ls="command ls ${colorflag}" # Always use color output for `ls`

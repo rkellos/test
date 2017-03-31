@@ -26,9 +26,10 @@ fi
 
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
-
+#export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 npm config delete prefix
+#export NVM_DIR="$HOME/.nvm" . "/usr/local/opt/nvm/nvm.sh"
 
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
@@ -38,7 +39,6 @@ fi
 export ANDROID_SDK_ROOT="/Users/rkellos/Library/Developer/Xamarin/android-sdk-macosx"
 # set dev directory for ios projects
 export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
-
 
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
@@ -56,6 +56,7 @@ export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" c
 # * ~/.extra can be used for other settings you don’t want to commit.
 
 source ~/.bash_prompt
+source $HOME/bash_completion.d/gradle-completion.bash
 source ~/.shell_functions
 source ~/.gitattributes
 
@@ -72,7 +73,7 @@ unset file;
 #   Set Default Editor (change 'Nano' to the editor of your choice)
 #   ------------------------------------------------------------
   #export EDITOR=/usr/bin/nano
-  export EDITOR="/Volumes/Data/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+  export EDITOR="code"
 
 #   Set default blocksize for ls, df, du
 #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
@@ -99,9 +100,9 @@ PATH=$PATH:$ANDROID_HOME/platform-tools
 PATH=$PATH:$ANDROID_HOME/tools
 export PATH
 
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export THEOS="/Volumes/Data/src/UDIDGenerator/theos"
 
-export PATH="$HOME/.fastlane/bin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
@@ -121,9 +122,6 @@ set process.env.JWT_AUDIENCE = "consumer"
 # set by request
 set process.env.AUTH_HEADER_KEY = ""
 set process.env.AUTH_HEADER_VALUE = ""
-
-# quick-start of chassis app [temp]
-alias chassis-start="AUTh=none npm start bin/www";
 
 #   -----------------------------
 #   2.  MAKE TERMINAL BETTER
@@ -146,7 +144,7 @@ alias e="$EDITOR"
 alias v="vim"
 alias cask='brew cask' # i <3 u cask
 
-alias subl='/Volumes/Data/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl' #Sublime
+alias v-code='/Volumes/Data/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome' # Google Chrome
 
 alias edit='subl '                           # edit:         Opens any file in sublime editor
@@ -160,6 +158,7 @@ alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias rm='rm -i -v'
 alias ungz="gunzip -k"
+alias del="rm -rf"
 
 # Trim new lines and copy to clipboard
 alias trimcopy="tr -d '\n' | pbcopy"
@@ -168,7 +167,7 @@ alias less='less -FSRXc' # Preferred 'less' implementation
 
 alias x+="chmod +x"
 alias -- +x="chmod +x"
-
+alias grant="sudo chown -R $(id -u):$(id -g) " #grant access to passed dir/file
 #####################
 
 # Download file and save it with filename of remote file
@@ -190,7 +189,6 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
 
-# common cb directories (src)
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cd-dl="cd ~/Downloads"
@@ -223,11 +221,21 @@ alias diskspace_report="df -P -kHl"
 alias free_diskspace_report="diskspace_report"
 
 # package lists
-#alias npm-list-old="cd ~; echo npm -gdls ll > npm-g-list && npm -gdls ll >> npm-g-list"
-alias npm-list="~; echo npm -gdls ll > ~/npm-g-list && npm -gdls ll | tee -a ~/npm-g-list;"
-alias brew-list="~; echo brew ls --full-name --mulitple --versions > ~/brew-list && brew ls --full-name --mulitple --versions  | tee -a ~/brew-list;"
-alias gem-list="~; echo gem list -daV > ~/gem-list && gem list -daV >> ~/gem-list"
+alias brew-bundle-check="brew bundle check --global -v | tee ~/brew-bundle-check"
+alias brew-bundle-refresh="brew bundle --global -v | tee ~/brew-bundle-refresh"
+alias brew-bundle-gen="brew bundle dump --force -v; cat ~/Brewfile"
+alias brew-bundle-update="brew bundle --global -v --force | tee ~/brew-bundle-update"
 
+alias brew-list="echo '--> brew bundle dump --force -v --global'; brew bundle dump --force -v --global | pv -C; echo;echo '--> brew ls --full-name --mulitple --versions' | tee ~/brew-list; brew ls --full-name --mulitple --versions | pv -C | tee -a ~/brew-list;echo"
+alias npm-list="echo '--> npm -gdls ll' | tee ~/npm-g-list; npm -gdls ll | pv -C | tee -a ~/npm-g-list;echo"
+alias gem-list="echo '--> gem list -daV' | tee ~/gem-list; gem list -daV | pv -C | tee -a ~/gem-list;echo"
+alias pip-list="echo '--> pip list -lv --format columns' | tee ~/pip-list; pip list -lv --format columns | pv -C | tee -a ~/pip-list;echo"
+
+alias package-lists="echo 'all lists...'; echo; brew-list; npm-list; gem-list; pip-list; echo;echo '--> all lists done |<--';echo;"
+alias packages="package-lists"
+alias lists="package-lists"
+
+#file listing
 alias l="ls -lF ${colorflag}" # List all files colorized in long format
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'" # List only directories
 alias ls="command ls ${colorflag}" # Always use color output for `ls`
@@ -259,25 +267,25 @@ alias apple-update=apple_update;
 alias update_apple=apple_update;
 alias update-apple=apple_update;
 
-alias update='sudo softwareupdate -i -a --background; brew update; echo "brew upgrade..."; brew upgrade --force-bottle --cleanup; brew cleanup; brew doctor; cask doctor; cask cleanup; source ~/.bash_profile; echo "npm latest..."; npm install npm@latest -gdl; echo npm "npm update..."; npm update -gdl; npm doctor; npm-check -g; echo "npm dedupe..."; npm dedupe -gd; echo "npm rebuild..."; npm -gdl rebuild; npm-check -gl; source ~/.bash_profile; sudo gem update -V --system; sudo gem update -V  --no-rdoc --no-ri; sudo gem check --doctor; source ~/.bash_profile;'
-alias node-latest='sudo npm install npm@latest -gd; echo "dedupe"; npm -gd ddp; echo "rebuild"; npm -gd rb; npm doctor; npm-check -gu; source ~/.bash_profile;'
+alias update='sudo softwareupdate -i -a --background; brew update; echo "brew upgrade..."; brew upgrade --force-bottle --cleanup; brew cleanup; echo "brew doctor..."; brew doctor; echo "cask doctor..."; cask doctor; cask cleanup; source ~/.bash_profile; echo "npm install next..."; npm install npm@next -gdl --save; echo npm "npm update..."; npm update -gdl; echo "npm doctor..."; npm doctor; echo "npm check..."; npm-check -g; echo "npm dedupe..."; npm dedupe -gd; echo "npm rebuild..."; npm -gdl rebuild; echo "npm check..."; npm-check -gl; source ~/.bash_profile; echo "gem update..."; sudo gem update -V --system; sudo gem update -V  --no-rdoc --no-ri; echo "gem check..."; sudo gem check --doctor; source ~/.bash_profile;'
+alias node-latest='echo "npm install latest..."; sudo npm install npm@latest -gd --save; echo "npm dedupe..."; npm -gd ddp; echo "npm rebuild..."; npm -gd rb; echo "npm doctor..."; npm doctor; echo "npm check..."; npm-check -gu; source ~/.bash_profile;'
 
 # Update installed Ruby gems, Homebrew, npm, and their installed packages
-alias brew_update="brew -v update; brew upgrade --force-bottle --cleanup; brew cleanup; brew cask cleanup; brew prune; brew doctor; npm-check -gu"
+alias brew_update='echo "brew update..."; brew -v update; echo "brew upgrade..."; brew upgrade --force-bottle --cleanup; brew cleanup; echo "cask cleanup..."; brew cask cleanup; echo "brew prune..."; brew prune; echo "brew doctor..."; brew doctor; echo "npm check..."; npm-check -gu'
 alias brew-update=brew_update;
 
 alias update_brew=brew_update;
 alias update-brew=brew_update;
 
-alias update_brew_npm_gem='brew_update; echo "npm latest..."; sudo npm install npm -g; echo "npm update..."; npm update -gd; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
+alias update_brew_npm_gem='echo "brew update..."; brew_update; echo "npm install next..."; sudo npm install npm@next -gdl --save; echo "npm update..."; npm update -gd; echo "gem update..."; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
 alias update-brew-npm-gem=update_brew_npm_gem;
 
-alias update_npm='echo "npm latest..."; sudo npm install npm -gl; echo "npm dedupe..."; npm dedupe -gdl; echo "npm rebuild..."; npm rebuild -gd; echo "npm update..."; npm update -gd; echo "npm check..."; npm-check -gu; echo "npm doctor..."; npm doctor; echo "npm outdated..."; npm -gdl outdated;'
+alias update_npm='echo "npm install next..."; sudo npm install npm@next -gdl --save; echo "npm dedupe..."; npm dedupe -gdl; echo "npm rebuild..."; npm rebuild -gd; echo "npm update..."; npm update -gd; echo "npm check..."; npm-check -gu; echo "npm doctor..."; npm doctor; echo "npm outdated..."; npm -gdl outdated;'
 alias update-npm=update_npm;
 alias npm_update=update_npm;
 alias npm-update=update_npm;
 
-alias update_gem='sudo gem update --system; sudo gem update --no-rdoc --no-ri'
+alias update_gem='echo "gem update..."; sudo gem update --system; sudo gem update --no-rdoc --no-ri; gem check --doctor'
 alias update-gem=update_gem;
 
 alias gem_update=update_gem;
@@ -444,6 +452,7 @@ alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup 
 alias g-root=gr
 
 # Git branch in prompt.
+
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
@@ -471,6 +480,8 @@ done
 command -v grunt > /dev/null && alias grunt="grunt --stack"
 
 map-name() { ( xargs -IE@ sed -i '' dirname; ) | ( find . -iname "$*" | tee ./"$*"_maps_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+map-text() { ( find . "$*" | tee ./"$*"_text_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+
 cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
