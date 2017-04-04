@@ -1,0 +1,140 @@
+#  ---------------------------------------------------------------------------
+#
+#  Description:  This file holds all my BASH configurations and aliases
+#
+#  Sections:
+#  1.   Environment Configuration
+#  2.   Make Terminal Better (remapping defaults and adding functionality)
+#  3.   File and Folder Management
+#  4.   Searching
+#  5.   Process Management
+#  6.   Networking
+#  7.   System Operations & Information
+#  8.   Web Development
+#  9.   Reminders & Notes
+#
+#  ---------------------------------------------------------------------------
+HOMEBREW_NO_ANALYTICS=1
+
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
+
+if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
+  eval "$(rbenv init -)"
+fi
+
+# Load nvm
+export NVM_DIR="$HOME/.nvm"
+
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+npm config delete prefix
+
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases
+fi
+
+# Load Android sdk
+export ANDROID_SDK_ROOT="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
+# set dev directory for ios projects
+export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
+
+#   -------------------------------
+#   1.  ENVIRONMENT CONFIGURATION
+#   -------------------------------
+
+#   Change Prompt
+#   ------------------------------------------------------------
+
+
+#  export PS1="\n________________________________________________________________________________\n$BLUEBOLD\$(parse_git_branch) $RED\w $PURPLE@ $GREEN\h $GREENBOLD(\u) $RESETCOLOR=> $WHITE"
+
+
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+
+source ~/.bash_prompt
+source ~/.bash_aliases
+source $HOME/bash_completion.d/gradle-completion.bash
+source ~/.shell_functions
+source ~/.gitattributes
+
+for file in ~/.{bash_prompt}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
+
+#   Set Paths
+#   ------------------------------------------------------------
+  export PATH="~/.rbenv:/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+
+#   Set Default Editor (change 'Nano' to the editor of your choice)
+#   ------------------------------------------------------------
+  #export EDITOR=/usr/bin/nano
+  export EDITOR="code"
+
+#   Set default blocksize for ls, df, du
+#   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
+#   ------------------------------------------------------------
+  export BLOCKSIZE=1k
+
+#   Add color to terminal
+#   (this is all commented out as I use Mac Terminal Profiles)
+#   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
+#   ------------------------------------------------------------
+  export CLICOLOR=1
+  export CLICOLOR_FORCE=1
+  export LSCOLORS=GxFxCxDxBxegedabagaced
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+export ANDROID_HOME="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
+export JAVA_HOME="`/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java_home`"
+
+export ANDROID_SDK=$ANDROID_HOME
+PATH=$PATH:/usr/local/share/npm/bin
+PATH=$PATH:$ANDROID_HOME/build-tools
+PATH=$PATH:$ANDROID_HOME/platform-tools
+PATH=$PATH:$ANDROID_HOME/tools
+export PATH
+
+export THEOS="/Volumes/Data/src/UDIDGenerator/theos"
+
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+# Prefer US English and use UTF-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
+
+launchctl setenv process.env.JWT_PUBLIC_KEY, "-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAsSXMR/u87eZf8lorRGgTAz50BBrkG4QwirSWXcPqhw/uDljRzelL
+fUaB3ZGIMbpCD/ue7o9alzgPdfa55ibBdVUR5DOPP+FZGiraQr5xGS8YwhF1gbbz
+MkeDM/DxrZEeUPQhYJk2XzvcWfCU4XdcAD5PYCujFr124zIvrWP60WR2/wileRsZ
+vdYPIZVSC5J2rk4o3T9PrNxM0fFHcmsiBMYECpcndrcT1uVc1FUx1TblQO7g/v8e
+cGUwAX/zBzZrWdAfZbSx5WV9kXm8eDpn+k9uGF5HigI36BCswfL/EauxzLrgN50L
+bS/V2K/ouXVPjhWP2Oeh9qGdQ8gI+c6uDQIDAQAB
+-----END RSA PUBLIC KEY-----"
+
+launchctl setenv process.env.JWT_ISSUER, "staging"
+launchctl setenv process.env.JWT_AUDIENCE, "consumer"
+
+launchctl setenv process.env.AUTH_HEADER_KEY, ""
+launchctl setenv process.env.AUTH_HEADER_VALUE, ""
+
+#   -----------------------------
+#   2.  MAKE TERMINAL BETTER
+#   -----------------------------
+
+# Use coreutils `ls` if possible
+hash gls >/dev/null 2>&1 || alias gls="ls"
+
+# Make Grunt print stack traces by default
+command -v grunt > /dev/null && alias grunt="grunt --stack"
+
+map-name() { ( xargs -IE@ sed -i '' dirname; ) | ( find . -iname "$*" | tee ./"$*"_maps_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+map-text() { ( find . "$*" | tee ./"$*"_text_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+
+cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
+ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
