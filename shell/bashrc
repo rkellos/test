@@ -1,4 +1,7 @@
+npm config delete prefix
+
 [ -n "$PS1" ] && source ~/.bash_profile
+
 ###-begin-npm-completion-###
 #
 # npm command completion script
@@ -57,10 +60,5 @@ elif type compctl &>/dev/null; then
 fi
 ###-end-npm-completion-###
 
-export NVM_DIR="/Users/rkellos/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-# added by travis gem
-[ -f /Users/rkellos/.travis/travis.sh ] && source /Users/rkellos/.travis/travis.sh
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash

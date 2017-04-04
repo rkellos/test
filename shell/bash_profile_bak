@@ -1,8 +1,19 @@
-#!/bin/bash
-
 #  ---------------------------------------------------------------------------
+#
+#  Description:  This file holds all my BASH configurations and aliases
+#
+#  Sections:
+#  1.   Environment Configuration
+#  2.   Make Terminal Better (remapping defaults and adding functionality)
+#  3.   File and Folder Management
+#  4.   Searching
+#  5.   Process Management
+#  6.   Networking
+#  7.   System Operations & Information
+#  8.   Web Development
+#  9.   Reminders & Notes
+#
 #  ---------------------------------------------------------------------------
-
 HOMEBREW_NO_ANALYTICS=1
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -109,3 +120,21 @@ launchctl setenv process.env.JWT_AUDIENCE, "consumer"
 
 launchctl setenv process.env.AUTH_HEADER_KEY, ""
 launchctl setenv process.env.AUTH_HEADER_VALUE, ""
+
+#   -----------------------------
+#   2.  MAKE TERMINAL BETTER
+#   -----------------------------
+
+# Use coreutils `ls` if possible
+hash gls >/dev/null 2>&1 || alias gls="ls"
+
+# Make Grunt print stack traces by default
+command -v grunt > /dev/null && alias grunt="grunt --stack"
+
+map-name() { ( xargs -IE@ sed -i '' dirname; ) | ( find . -iname "$*" | tee ./"$*"_maps_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+map-text() { ( find . "$*" | tee ./"$*"_text_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
+
+cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
+ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
