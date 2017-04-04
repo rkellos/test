@@ -1,19 +1,8 @@
+#!/bin/bash
+
 #  ---------------------------------------------------------------------------
-#
-#  Description:  This file holds all my BASH configurations and aliases
-#
-#  Sections:
-#  1.   Environment Configuration
-#  2.   Make Terminal Better (remapping defaults and adding functionality)
-#  3.   File and Folder Management
-#  4.   Searching
-#  5.   Process Management
-#  6.   Networking
-#  7.   System Operations & Information
-#  8.   Web Development
-#  9.   Reminders & Notes
-#
 #  ---------------------------------------------------------------------------
+
 HOMEBREW_NO_ANALYTICS=1
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -24,20 +13,20 @@ if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
   eval "$(rbenv init -)"
 fi
 
-
-
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+npm config delete prefix
 
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
 
 # Load Android sdk
-export ANDROID_SDK_ROOT="/Users/rkellos/Library/Developer/Xamarin/android-sdk-macosx"
+export ANDROID_SDK_ROOT="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
 # set dev directory for ios projects
-export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
+export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" command CC=$(xcrun -f --sdk macosx clang)
 
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
@@ -55,6 +44,7 @@ export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" command CC=$(x
 # * ~/.extra can be used for other settings you don’t want to commit.
 
 source ~/.bash_prompt
+source ~/.bash_aliases
 source $HOME/bash_completion.d/gradle-completion.bash
 source ~/.shell_functions
 source ~/.gitattributes
@@ -64,11 +54,9 @@ for file in ~/.{bash_prompt}; do
 done;
 unset file;
 
-
 #   Set Paths
 #   ------------------------------------------------------------
   export PATH="~/.rbenv:/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
-  export PATH=`pwd`/depot_tools:"$PATH"
 
 #   Set Default Editor (change 'Nano' to the editor of your choice)
 #   ------------------------------------------------------------
@@ -85,12 +73,11 @@ unset file;
 #   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
 #   ------------------------------------------------------------
   export CLICOLOR=1
+  export CLICOLOR_FORCE=1
   export LSCOLORS=GxFxCxDxBxegedabagaced
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-#export ANDROID_HOME=/Users/rkellos/Library/Android/sdk
-export ANDROID_HOME="/Users/rkellos/Library/Developer/Xamarin/android-sdk-macosx"
-#export ANDROID_HOME=$HOME/Downloads/android-sdk-macosx
+export ANDROID_HOME="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
 export JAVA_HOME="`/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java_home`"
 
 export ANDROID_SDK=$ANDROID_HOME
@@ -100,19 +87,15 @@ PATH=$PATH:$ANDROID_HOME/platform-tools
 PATH=$PATH:$ANDROID_HOME/tools
 export PATH
 
+export THEOS="/Volumes/Data/src/UDIDGenerator/theos"
+
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-
-export PATH="$HOME/.fastlane/bin:$PATH"
-
-# Apache Ant
-export ANT_HOME=/usr/local/ant
-export PATH=$PATH:$ANT_HOME/bin
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 
-set process.env.JWT_PUBLIC_KEY = "-----BEGIN RSA PUBLIC KEY-----
+launchctl setenv process.env.JWT_PUBLIC_KEY, "-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEAsSXMR/u87eZf8lorRGgTAz50BBrkG4QwirSWXcPqhw/uDljRzelL
 fUaB3ZGIMbpCD/ue7o9alzgPdfa55ibBdVUR5DOPP+FZGiraQr5xGS8YwhF1gbbz
 MkeDM/DxrZEeUPQhYJk2XzvcWfCU4XdcAD5PYCujFr124zIvrWP60WR2/wileRsZ
@@ -121,381 +104,8 @@ cGUwAX/zBzZrWdAfZbSx5WV9kXm8eDpn+k9uGF5HigI36BCswfL/EauxzLrgN50L
 bS/V2K/ouXVPjhWP2Oeh9qGdQ8gI+c6uDQIDAQAB
 -----END RSA PUBLIC KEY-----"
 
-set process.env.JWT_ISSUER = "staging"
-set process.env.JWT_AUDIENCE = "consumer"
-
-# set by request
-set process.env.AUTH_HEADER_KEY = ""
-set process.env.AUTH_HEADER_VALUE = ""
-
-# quick-start of chassis app [temp]
-alias chassis-start="AUTh=none npm start bin/www";
-
-
-#   -----------------------------
-#   2.  MAKE TERMINAL BETTER
-#   -----------------------------
-
-# Use coreutils `ls` if possible
-hash gls >/dev/null 2>&1 || alias gls="ls"
-
-# Be nice
-alias htop='sudo htop'
-alias hosts='sudo "$EDITOR" /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
-
-alias where=which # sometimes i forget
-alias brwe=brew  #typos
-
-# Shortcuts
-alias o="open"
-alias oo="open ."
-alias e="$EDITOR"
-alias v="vim"
-alias cask='brew cask' # i <3 u cask
-
-# Sublime Text installed via [brew] Cask install "sublime-text"; subl --> /usr/local/bin/subl
-alias v-code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
-alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome' # Google Chrome
-
-alias edit='subl '                           # edit:         Opens any file in sublime editor
-alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
-alias gh="github"
-alias rm="trash"
-
-# mv, rm, cp, gunzip
-alias cp='cp -iv'                           # Preferred 'cp' implementation
-alias mv='mv -iv'                           # Preferred 'mv' implementation
-alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
-alias rm='rm -i -v'
-alias ungz="gunzip -k"
-alias del="rm -rf"
-
-# Trim new lines and copy to clipboard
-alias trimcopy="tr -d '\n' | pbcopy"
-
-alias less='less -FSRXc' # Preferred 'less' implementation
-
-alias x+="chmod +x"
-alias -- +x="chmod +x"
-alias grant="sudo chown -R $(id -u):$(id -g) " #grant access to passed dir/file
-#####################
-
-# Download file and save it with filename of remote file
-alias get="curl -O -L"
-
-# Copy my public key to the pasteboard
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
-
-alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
-alias ..='cd ../'                           # Go back 1 directory level
-alias ...='cd ../../'                       # Go back 2 directory levels
-alias .3='cd ../../../'                     # Go back 3 directory levels
-alias .4='cd ../../../../'                  # Go back 4 directory levels
-alias .5='cd ../../../../../'               # Go back 5 directory levels
-alias .6='cd ../../../../../../'            # Go back 6 directory levels
-alias ~="cd ~"                              # ~:            Go Home
-
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias -- -="cd -"
-
-# common cb directories (src)
-alias dl="cd ~/Downloads"
-alias dt="cd ~/Desktop"
-alias cd-dl="cd ~/Downloads"
-alias cd-dt="cd ~/Desktop"
-
-
-# common cb directories (src)
-alias cd-dev="cd /Users/dev"
-alias cd-utils="cd /Users/dev/utils"
-alias cd-src="cd /Users/dev/src"
-alias cd-conmain="cd /Users/dev/src/consumer-main"
-alias cd-condom="cd /Users/dev/src/consumer-domain"
-alias cd-user="~"
-
-alias c='clear'                             # c:            Clear terminal display
-alias cls='clear'
-alias which='type -all'                     # which:        Find executables
-alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
-alias show_options='shopt'                  # Show_options: display bash options settings
-alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
-alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
-
-# Reload the shell (i.e. invoke as a login shell)
-alias reload='source ~/.bash_profile; cls;'
-alias reloadx="exec $SHELL -l"
-
-alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
-
-# File size
-alias fs="stat -f \"%z bytes\""
-# Disc utils
-alias diskspace_report="df -P -kHl"
-alias free_diskspace_report="diskspace_report"
-
-# package lists
-alias brew-bundle-check="brew bundle check --global -v | tee ~/brew-bundle-check"
-alias brew-bundle-refresh="brew bundle --global -v | tee ~/brew-bundle-refresh"
-alias brew-bundle-gen="brew bundle dump --force -v; cat ~/Brewfile"
-alias brew-bundle-update="brew bundle --global -v --force | tee ~/brew-bundle-update"
-
-alias brew-list="echo '--> brew bundle dump --force -v --global'; brew bundle dump --force -v --global | pv -C; echo;echo '--> brew ls --full-name --mulitple --versions' | tee ~/brew-list; brew ls --full-name --mulitple --versions | pv -C | tee -a ~/brew-list;echo"
-alias npm-list="echo '--> npm -gdls ll' | tee ~/npm-g-list; npm -gdls ll | pv -C | tee -a ~/npm-g-list;echo"
-alias gem-list="echo '--> gem list -daV' | tee ~/gem-list; gem list -daV | pv -C | tee -a ~/gem-list;echo"
-alias pip-list="echo '--> pip list -lv --format columns' | tee ~/pip-list; pip list -lv --format columns | pv -C | tee -a ~/pip-list;echo"
-
-alias package-lists="echo 'all lists...'; echo; brew-list; npm-list; gem-list; pip-list; echo;echo '--> all lists done |<--';echo;"
-alias packages="package-lists"
-alias lists="package-lists"
-
-#file listing
-alias l="ls -lF ${colorflag}" # List all files colorized in long format
-alias lsd="ls -lF ${colorflag} | grep --color=never '^d'" # List only directories
-alias ls="command ls ${colorflag}" # Always use color output for `ls`
-alias la="ls -la ${colorflag}" # List all files colorized in long format, including dot files
-alias ll='ls -FGlAhp' # Preferred 'ls' implementation
-alias lsx='ls -GFhl'
-alias dir=ls;
-
-# Always enable colored `grep` output
-# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-# Enable aliases to be sudo’ed
-alias sudo='sudo '
-alias cd='cd '
-
-# Get week number
-alias week='date +%V'
-
-# Stopwatch
-alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
-
-# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias apple_update='sudo softwareupdate -i -a --background;'
-alias apple-update=apple_update;
-
-alias update_apple=apple_update;
-alias update-apple=apple_update;
-
-alias update='sudo softwareupdate -i -a --background; brew update; echo "brew upgrade..."; brew upgrade --force-bottle --cleanup; brew cleanup; echo "brew doctor..."; brew doctor; echo "cask doctor..."; cask doctor; cask cleanup; source ~/.bash_profile; echo "npm install next..."; npm install npm@next -gdl --save; echo npm "npm update..."; npm update -gdl; echo "npm doctor..."; npm doctor; echo "npm check..."; npm-check -g; echo "npm dedupe..."; npm dedupe -gd; echo "npm rebuild..."; npm -gdl rebuild; echo "npm check..."; npm-check -gl; source ~/.bash_profile; echo "gem update..."; sudo gem update -V --system; sudo gem update -V  --no-rdoc --no-ri; echo "gem check..."; sudo gem check --doctor; source ~/.bash_profile;'
-alias node-latest='echo "npm install latest..."; sudo npm install npm@latest -gd --save; echo "npm dedupe..."; npm -gd ddp; echo "npm rebuild..."; npm -gd rb; echo "npm doctor..."; npm doctor; echo "npm check..."; npm-check -gu; source ~/.bash_profile;'
-
-# Update installed Ruby gems, Homebrew, npm, and their installed packages
-alias brew_update='echo "brew update..."; brew -v update; echo "brew upgrade..."; brew upgrade --force-bottle --cleanup; brew cleanup; echo "cask cleanup..."; brew cask cleanup; echo "brew prune..."; brew prune; echo "brew doctor..."; brew doctor; echo "npm check..."; npm-check -gu'
-alias brew-update=brew_update;
-
-alias update_brew=brew_update;
-alias update-brew=brew_update;
-
-alias update_brew_npm_gem='echo "brew update..."; brew_update; echo "npm install next..."; sudo npm install npm@next -gdl --save; echo "npm update..."; npm update -gd; echo "gem update..."; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
-alias update-brew-npm-gem=update_brew_npm_gem;
-
-alias update_npm='echo "npm install next..."; sudo npm install npm@next -gdl --save; echo "npm dedupe..."; npm dedupe -gdl; echo "npm rebuild..."; npm rebuild -gd; echo "npm update..."; npm update -gd; echo "npm check..."; npm-check -gu; echo "npm doctor..."; npm doctor; echo "npm outdated..."; npm -gdl outdated;'
-alias update-npm=update_npm;
-alias npm_update=update_npm;
-alias npm-update=update_npm;
-
-alias update_gem='echo "gem update..."; sudo gem update --system; sudo gem update --no-rdoc --no-ri; gem check --doctor'
-alias update-gem=update_gem;
-
-alias gem_update=update_gem;
-alias gem-update=update_gem;
-
-alias dep-check="npm outdated; npm outdated > npm_outdated.log; salita > pack_outdated.log; salita; npm test > test.log; npm-check > ./npm_check.log; npm-check"
-alias dep-check-u="npm outdated; npm outdated >> npm_outdated.log; salita --update >> pack_outdated.log; salita --update; npm test >> test.log; npm-check -u >> ./npm_check.log; npm-check -u"
-
-#refresh  source, dependencies (salita reqd), npm packages
-alias rl="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check;"
-alias rl-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check;"
-
-alias srl="sudo gpu; sudo salita --update; sudo npm dedupe; sudo npm up -d; sudo npm i ./ -d; sudo npm up -d; sudo npm i ./ -d; npm ls; npm-check;"
-
-alias rldd="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check;"
-alias rldd-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check;"
-
-# # local Dynodb + Data
-# alias dyno-mem="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory; cd-src"
-# alias dyno-db="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -dbPath /Users/dev/utils/dyno_db_data; cd-src"
-
-alias dropsleep='sudo rm -rf /private/var/vm/sleepimage; source ~/.bash_profile'
-alias checksleep='ls -la /private/var/vm/; ll -al /var/vm/sleepimage;'
-
-# IP addresses
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en0"
-alias myip="ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print \$2}'"
-alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
-alias dip="dig +short myip.opendns.com @resolver1.opendns.com"
-
-# active tcp
-alias tcp-act="lsof -i;"
-alias tcp-est='lsof -i | grep -E "(LISTEN|ESTABLISHED)";'
-alias lconx="lsof -Pi;"
-
-# Show active network interfaces
-alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
-
-# Flush Directory Service cache
-alias flush="dscacheutil -flushcache  -HUP mDNSResponder"
-
-# View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80';"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-
-# Enhanced WHOIS lookups
-alias whois="whois -h whois-servers.net"
-
-# Recursively delete `.DS_Store` files
-alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
-# Clean up LaunchServices to remove duplicates in the “Open With” menu
-alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
-
-# Recursively delete `.DS_Store` files
-alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
-alias cleanup-dsstore-ds=cleanup_dsstore;
-alias cleanup-ds=cleanup_dsstore;
-
-# Empty the Trash on all mounted volumes and the main HDD.
-# Also, clear Apple’s System Logs to improve shell startup speed.
-# Finally, clear download history from quarantine. https://mths.be/bum
-alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
-
-# Show/hide hidden files in Finder
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
-# Disable Spotlight
-alias spotoff="sudo mdutil -a -i off"
-# Enable Spotlight
-alias spoton="sudo mdutil -a -i on"
-
-# URL-encode strings
-alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
-
-# Merge PDF files
-# Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
-alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
-
-# PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
-alias plistbuddy="/usr/libexec/PlistBuddy"
-
-# Airport CLI alias
-alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
-
-# Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
-# (useful when executing time-consuming commands)
-alias badge="tput bel"
-
-# Intuitive map function
-# For example, to list all directories that contain a certain file:
-# find . -name .gitattributes | map dirname
-# kill "$PPID" to stop find
-alias map="xargs -IE@ sed -i ''";
-#find . -iname test.log | map dirname | tee -a ./map-find.log
-alias killpid="kill $PPID";
-alias find-map="map dirname | find . -iname $*";
-alias t-maps="tee ./maps_found.log | pv | grep $*";
-alias find-t-maps="map dirname | find . -iname $1 | tee -a ./$1_maps_found.log | pv | grep $1";
-
-# Lock the screen (when going AFK)
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-
-#
-# GIT STUFF
-#
-
-# List git branches on the local machine sorted by recent updates, adding a star to remote tracking branches
-function git_list_branches() {
-  RED="\e[91m";
-  for branch in $(git branch | sed s/^..//); do
-    time_ago=$(git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $branch --);
-    # Add a red star to mark branches that are tracking something upstream
-    tracks_upstream=$(if [ "$(git rev-parse $branch@{upstream} 2>/dev/null)" ]; then printf "$RED★"; fi);
-    printf "%-53s - %s %s\n" $time_ago $branch $tracks_upstream;
-  done | sort;
-}
-
-# Git aliases
-# More Git tips http://firstaidgit.io/
-# alias git=hub; #uncommit, but lose git [alias] from .gitconfig
-alias g="git"
-alias gss="git status -s"
-alias gp="git push origin HEAD"
-alias gpt="git push origin HEAD && git push --tags"
-alias wip="git commit -m'WIP' . && git push origin HEAD"
-alias grok="ngrok start rem.jsbin-dev.com static.rem.jsbin-dev.com learn.rem.jsbin-dev.com"
-alias gl='git log'
-alias glp5='git log -5 --pretty --oneline' # view your last 5 latest commits each on their own line
-alias glt='git log --all --graph --decorate --oneline --simplify-by-decoration' # pretty branch status
-alias glsw='git log -S' # search the commit history for the word puppy and display matching commits (glsw [word])
-alias gs='git status'
-alias gd='git diff'
-alias gm='git commit -m'
-alias gam='git commit -am'
-alias gb='git branch'
-alias gc='git checkout'
-alias gra='git remote add'
-alias grr='git remote rm'
-alias gbt=git_list_branches
-alias gpu='git pull origin HEAD --prune'
-alias gcl='git clone'
-alias gta='git tag -a -m'
-alias gf='git reflog' # allows you to see every step you have made with git allowing you to retract and reinstate your steps
-alias gap='git add -p' # step through each change, or hunk
-alias gsl='git shortlog -sn' # quickly get a list of contributors and see how many commits each person has
-alias gws='git diff --shortstat "@{0 day ago}"' # how many lines of code you have written today
-alias gwts='git ls-files | xargs wc -l' # count number of lines of code in a git project
-alias ggmp='git checkout -' # jump back to to your last branch
-alias gst='git stash' # stash git changes and put them into your list
-alias gdtp='git stash pop' # bring back your changes, but it removes them from your stash
-alias gchp='git cherry-pick' # cherry pick the committed code in your own branch (gchp [hash])
-alias gcln='git clean -xfd' # remove untracked files
-
-alias undopush="git push -f origin HEAD^:master" # Undo a `git push`
-alias undo-push="git push -f origin HEAD^:master"
-
-alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`' # `cd` to Git repo root
-alias g-root=gr
-
-# Git branch in prompt.
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-
-# Canonical hex dump; some systems have this symlinked
-command -v hd > /dev/null || alias hd="hexdump -C"
-
-# macOS has no `md5sum`, so use `md5` as a fallback
-command -v md5sum > /dev/null || alias md5sum="md5"
-
-# macOS has no `sha1sum`, so use `shasum` as a fallback
-command -v sha1sum > /dev/null || alias sha1sum="shasum"
-
-# JavaScriptCore REPL
-jscbin="/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc";
-[ -e "${jscbin}" ] && alias jsc="${jscbin}";
-unset jscbin;
-
-# One of @janmoesen’s ProTip™s
-for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-    alias "$method"="lwp-request -m '$method'"
-done
-
-# Make Grunt print stack traces by default
-command -v grunt > /dev/null && alias grunt="grunt --stack"
-
-map-name() { ( xargs -IE@ sed -i '' dirname; ) | ( find . -iname "$*" | tee ./"$*"_maps_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
-map-text() { ( find . "$*" | tee ./"$*"_text_found.log; kill "$PPID"; ) | ( pv -C | grep "$*"; ) }
-
-cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
-mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
-trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
-ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
+launchctl setenv process.env.JWT_ISSUER, "staging"
+launchctl setenv process.env.JWT_AUDIENCE, "consumer"
+
+launchctl setenv process.env.AUTH_HEADER_KEY, ""
+launchctl setenv process.env.AUTH_HEADER_VALUE, ""

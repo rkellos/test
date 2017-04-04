@@ -1,0 +1,337 @@
+#
+# Aliases - ln -fs /Users/${USER}/dotfiles-master/shell/bash_aliases .bash_aliases
+
+# Be nice
+alias htop='sudo htop'
+alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
+
+alias where=which # sometimes i forget
+alias brwe=brew  #typos
+
+# Shortcuts
+alias o="open"
+alias oo="open ."
+alias e="$EDITOR"
+alias v="vim"
+alias cask='brew cask' # i <3 u cask
+
+alias v-code='/Volumes/Data/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
+alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome' # Google Chrome
+
+alias edit='subl '                           # edit:         Opens any file in sublime editor
+alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
+alias gh="github"
+alias rm="trash"
+
+# mv, rm, cp, gunzip
+alias cp='cp -iv'                           # Preferred 'cp' implementation
+alias mv='mv -iv'                           # Preferred 'mv' implementation
+alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
+alias rm='rm -i -v'
+alias ungz="gunzip -k"
+alias del="rm -rf"
+
+# Trim new lines and copy to clipboard
+alias trimcopy="tr -d '\n' | pbcopy"
+
+alias less='less -FSRXc' # Preferred 'less' implementation
+
+alias x+="chmod +x"
+alias -- +x="chmod +x"
+alias grant="sudo chown -R $(id -u):$(id -g) " #grant access to passed dir/file
+alias set-package-permissions="echo;echo '--> set permissions...'; grant '/usr/local/bin'; grant '/usr/local/bin/npm'; grant '/usr/local/bin/node'; grant '/usr/local/bin/brew'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/node'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/npm'; grant '/usr/local/bin/nvm'; grant '/usr/local/bin/rbenv'; grant '/usr/local/bin/bash'; echo;echo 'permissions set|<--'"
+#####################
+
+# Download file and save it with filename of remote file
+alias get="curl -O -L"
+
+# Copy my public key to the pasteboard
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
+
+alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
+alias ..='cd ../'                           # Go back 1 directory level
+alias ...='cd ../../'                       # Go back 2 directory levels
+alias .3='cd ../../../'                     # Go back 3 directory levels
+alias .4='cd ../../../../'                  # Go back 4 directory levels
+alias .5='cd ../../../../../'               # Go back 5 directory levels
+alias .6='cd ../../../../../../'            # Go back 6 directory levels
+alias ~='cd ~'                              # ~:            Go Home
+
+alias ....='cd ../../..'''
+alias .....='cd ../../../..'
+alias -- -='cd -'
+
+alias dl='cd ~/Downloads'
+alias dt='cd ~/Desktop'
+alias cd-dl='cd ~/Downloads'
+alias cd-dt='cd ~/Desktop'
+alias cd-temp='cd /Users/temp'
+
+alias cd-data='cd /Volumes/Data'
+alias cd-src='cd /Volumes/Data/src'
+alias cd-edu='cd /Volumes/Data/edu'
+alias cd-done='cd /Volumes/Data/Tor'
+
+alias c='clear'                             # c:            Clear terminal display
+alias cls='clear'
+alias which='type -all'                     # which:        Find executables
+alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
+alias show_options='shopt'                  # Show_options: display bash options settings
+alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
+alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload-anyshell='exec $SHELL -l'
+alias refresh='source ~/.bash_profile'
+alias reload='cls; reload-anyshell; refresh'
+
+alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+
+# File size
+alias fs="stat -f \"%z bytes\""
+# Disc utils
+alias diskspace_report="df -P -kHl"
+alias free_diskspace_report="diskspace_report"
+
+# package lists
+alias brew-bundle-check="echo;echo '--> brew bundle check --global -v'; brew bundle check --global -v | tee ~/brew-bundle-check"
+alias brew-bundle-refresh="echo;echo '--> brew bundle --global -v'; brew bundle --global -v | tee ~/brew-bundle-refresh"
+alias brew-bundle-gen="echo;echo '--> brew bundle dump --force -v'; brew bundle dump --force -v; cat ~/Brewfile"
+alias brew-bundle-update="echo;echo '--> brew bundle dump --force -v --global'; brew bundle dump --force -v --global | tee ~/brew-bundle-update"
+
+alias brew-list="brew-bundle-update | pv -C; echo;echo '--> brew ls --full-name --mulitple --versions' | tee ~/brew-list; brew ls --full-name --mulitple --versions | pv -C | tee -a ~/brew-list"
+alias npm-list="echo;echo '--> npm -gdls ll' | tee ~/npm-g-list; npm -gdls ll | pv -C | tee -a ~/npm-g-list"
+alias gem-list="echo;echo '--> gem list -daV' | tee ~/gem-list; gem list -daV | pv -C | tee -a ~/gem-list;echo"
+alias pip-list="echo;echo '--> pip list -lv --format columns' | tee ~/pip-list; pip list -lv --format columns | pv -C | tee -a ~/pip-list"
+
+alias package-lists="echo;echo '--> all lists...'; brew-list; npm-list; gem-list; pip-list; echo;echo 'all lists done |<--'"
+alias packages="package-lists"
+alias lists="package-lists"
+
+alias l="ls -lF ${colorflag}" # List all files colorized in long format
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'" # List only directories
+alias ls="command ls ${colorflag}" # Always use color output for `ls`
+alias la="ls -la ${colorflag}" # List all files colorized in long format, including dot files
+alias ll='ls -FGlAhp' # Preferred 'ls' implementation
+alias lsx="command ls -GFhl ${colorflag}"
+alias dir="ls";
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+alias cd='cd '
+alias purge='sudo purge'
+
+# Get week number
+alias week='date +%V'
+
+# Stopwatch
+alias timer='echo;echo "--> Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias apple_update='echo;echo "--> system softwareupdate --background"; sudo softwareupdate -i -a --background'
+alias apple-update="apple_update"
+
+alias update_apple="apple_update"
+alias update-apple="apple_update"
+
+# Update installed Ruby gems, Homebrew, npm, and their installed packages
+alias brew-cleanup='echo;echo "--> brew cleanup..."; brew cleanup; echo;echo "--> cask cleanup..."; brew cask cleanup; echo;echo "--> brew prune..."; brew prune; echo;echo "--> brew doctor..."; brew doctor'
+alias brew_update='set-package-permissions; echo;echo "--> brew update..."; brew -v update; echo;echo "--> brew upgrade..."; brew upgrade --force-bottle --cleanup; brew-cleanup; brew-bundle-update; refresh'
+alias brew-update="brew_update"
+
+alias update_brew="brew_update"
+alias update-brew="brew_update"
+
+alias node-latest='set-package-permissions; echo;echo "--> npm install @latest..."; sudo npm install npm@latest -gd --save; echo;echo "--> npm dedupe..."; npm -gd ddp; echo;echo "--> npm rebuild..."; npm -gd rb; echo;echo "--> npm doctor..."; npm doctor; echo;echo "--> npm check..."; npm-check -gua; npm config set save-exact = true; refresh'
+
+alias npm-check='echo;echo "--> npm check..."; npm-check -gua'
+alias npm-cleanup='echo;echo "--> npm dedupe..."; npm dedupe -gdl; echo;echo "--> npm rebuild..."; npm rebuild -gd; echo;echo "--> npm doctor..."; npm doctor; echo;echo "--> npm outdated..."; npm -gdl outdated'
+alias npm_update='set-package-permissions; echo;echo "--> npm install @next..."; sudo npm install npm@next -gdl --save; echo;echo "--> npm update..."; npm update -gd; npm-check; npm-cleanup; npm config set save-exact = true; refresh'
+alias npm-update="npm_update"
+
+alias update_npm="update_npm"
+alias update-npm="update_npm"
+
+alias gem-check='echo;echo "--> gem check..."; sudo gem check --doctor'
+alias gem-cleanup='echo;echo "--> gem cleanup..."; sudo gem cleanup'
+alias gem_update='set-package-permissions; echo;echo "--> gem update..."; sudo gem update --system -V --no-rdoc --no-ri; sudo gem update -V --no-rdoc --no-ri; gem-check; gem-cleanup; refresh'
+alias gem-update-gem="gem_update"
+
+alias update_gem="gem_update"
+alias update-gem="gem_update"
+
+alias update='echo;echo "--> full update..."; apple_update; brew_update; npm_update; gem_update; echo;echo "completed update |<--"; refresh'
+
+alias dep-check="npm outdated; npm outdated > npm_outdated.log; salita > pack_outdated.log; salita; npm test > test.log; npm-check > ./npm_check.log; npm-check"
+alias dep-check-u="npm outdated; npm outdated >> npm_outdated.log; salita --update >> pack_outdated.log; salita --update; npm test >> test.log; npm-check -u >> ./npm_check.log; npm-check -u"
+
+#refresh  source, dependencies (salita reqd), npm packages
+alias rl="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check"
+alias rl-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check"
+
+alias srl="sudo gpu; sudo salita --update; sudo npm dedupe; sudo npm up -d; sudo npm i ./ -d; sudo npm up -d; sudo npm i ./ -d; npm ls; npm-check"
+
+alias rldd="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
+alias rldd-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
+
+# # local Dynodb + Data
+# alias dyno-mem="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory; cd-src"
+# alias dyno-db="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -dbPath /Users/dev/utils/dyno_db_data; cd-src"
+
+alias dropsleep='sudo rm -rf /private/var/vm/sleepimage; reload'
+alias checksleep='ls -la /private/var/vm/; ll -al /var/vm/sleepimage'
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+alias myip="ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print \$2}'"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+alias dig="dig +nocmd any +multiline +noall +answer"
+alias dip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# active tcp
+alias tcp-act="lsof -i"
+alias tcp-est='lsof -i | grep -E "(LISTEN|ESTABLISHED)"'
+alias lconx="lsof -Pi"
+
+# Show active network interfaces
+alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+
+# Flush Directory Service cache
+alias flush="dscacheutil -flushcache  -HUP mDNSResponder"
+
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+# Enhanced WHOIS lookups
+alias whois="whois -h whois-servers.net"
+
+# Recursively delete `.DS_Store` files
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+# Clean up LaunchServices to remove duplicates in the “Open With” menu
+alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+
+# Recursively delete `.DS_Store` files
+alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+alias cleanup-dsstore-ds="cleanup_dsstore"
+alias cleanup-ds="cleanup_dsstore"
+
+# Empty the Trash on all mounted volumes and the main HDD.
+# Also, clear Apple’s System Logs to improve shell startup speed.
+# Finally, clear download history from quarantine. https://mths.be/bum
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Disable Spotlight
+alias spotoff="sudo mdutil -a -i off"
+# Enable Spotlight
+alias spoton="sudo mdutil -a -i on"
+
+# URL-encode strings
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
+
+# Merge PDF files
+# Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
+alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
+
+# PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
+alias plistbuddy="/usr/libexec/PlistBuddy"
+
+# Airport CLI alias
+alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+
+# Ring the terminal bell, and put a badge on Terminal.app’s Dock icon
+# (useful when executing time-consuming commands)
+alias badge="tput bel"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+# kill "$PPID" to stop find
+alias map="xargs -IE@ sed -i ''";
+#find . -iname test.log | map dirname | tee -a ./map-find.log
+alias killpid="kill $PPID";
+alias find-map="map dirname | find . -iname $*";
+alias t-maps="tee ./$*_maps_found.log | pv | grep $*";
+alias find-t-maps="map dirname | find . -iname $1 | tee -a ./$1_maps_found.log | pv | grep $1";
+
+# Lock the screen (when going AFK)
+alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+#
+# GIT STUFF
+#
+# Git aliases
+# More Git tips http://firstaidgit.io/
+# alias git=hub; #uncommit, but lose git [alias] from .gitconfig
+alias g="git"
+alias gss="git status -s"
+alias gp="git push origin HEAD"
+alias gpt="git push origin HEAD && git push --tags"
+alias wip="git commit -m'WIP' . && git push origin HEAD"
+alias grok="ngrok start rem.jsbin-dev.com static.rem.jsbin-dev.com learn.rem.jsbin-dev.com"
+alias gl='git log'
+alias glp5='git log -5 --pretty --oneline' # view your last 5 latest commits each on their own line
+alias glt='git log --all --graph --decorate --oneline --simplify-by-decoration' # pretty branch status
+alias glsw='git log -S' # search the commit history for the word puppy and display matching commits (glsw [word])
+alias gs='git status'
+alias gd='git diff'
+alias gm='git commit -m'
+alias gam='git commit -am'
+alias gb='git branch'
+alias gc='git checkout'
+alias gra='git remote add'
+alias grr='git remote rm'
+alias gbt=git_list_branches
+alias gpu='git pull origin HEAD --prune'
+alias gcl='git clone'
+alias gta='git tag -a -m'
+alias gf='git reflog' # allows you to see every step you have made with git allowing you to retract and reinstate your steps
+alias gap='git add -p' # step through each change, or hunk
+alias gsl='git shortlog -sn' # quickly get a list of contributors and see how many commits each person has
+alias gws='git diff --shortstat "@{0 day ago}"' # how many lines of code you have written today
+alias gwts='git ls-files | xargs wc -l' # count number of lines of code in a git project
+alias ggmp='git checkout -' # jump back to to your last branch
+alias gst='git stash' # stash git changes and put them into your list
+alias gdtp='git stash pop' # bring back your changes, but it removes them from your stash
+alias gchp='git cherry-pick' # cherry pick the committed code in your own branch (gchp [hash])
+alias gcln='git clean -xfd' # remove untracked files
+
+alias undopush="git push -f origin HEAD^:master" # Undo a `git push`
+alias undo-push="git push -f origin HEAD^:master"
+
+alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`' # `cd` to Git repo root
+alias g-root=gr
+
+# Canonical hex dump; some systems have this symlinked
+command -v hd > /dev/null || alias hd="hexdump -C"
+
+# macOS has no `md5sum`, so use `md5` as a fallback
+command -v md5sum > /dev/null || alias md5sum="md5"
+
+# macOS has no `sha1sum`, so use `shasum` as a fallback
+command -v sha1sum > /dev/null || alias sha1sum="shasum"
+
+# JavaScriptCore REPL
+jscbin="/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc";
+[ -e "${jscbin}" ] && alias jsc="${jscbin}";
+unset jscbin;
+
+# One of @janmoesen’s ProTip™s
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+    alias "$method"="lwp-request -m '$method'"
+done
