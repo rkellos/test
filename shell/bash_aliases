@@ -44,7 +44,7 @@ alias less='less -FSRXc' # Preferred 'less' implementation
 alias x+="chmod +x"
 alias -- +x="chmod +x"
 alias grant="sudo chown -R $(id -u):$(id -g) " #grant access to passed dir/file
-alias set-package-permissions="echo;echo '--> set permissions...'; grant '/usr/local/bin'; grant '/usr/local/bin/npm'; grant '/usr/local/bin/node'; grant '/usr/local/bin/brew'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/node'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/npm'; grant '/usr/local/bin/nvm'; grant '/usr/local/bin/rbenv'; grant '/usr/local/bin/bash'; echo;echo 'permissions set|<--'"
+alias set-package-permissions="echo;echo '--> set permissions...'; grant '/usr/local/bin'; grant '/usr/local/bin/npm'; grant '/usr/local/bin/node'; grant '/usr/local/bin/brew'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/node'; grant '/Users/${USER}/.nvm/versions/node/v7.8.0/bin/npm'; grant '/usr/local/bin/nvm'; grant '/usr/local/bin/rbenv'; grant '/usr/local/bin/bash'; grant '/usr/local/go/bin'; grant '/usr/local/go'; grant '/usr/local/lib/node_modules/npm'; echo;echo 'permissions set|<--'"
 ##-----------------------------
 
 # Download file and save it with filename of remote file
@@ -139,7 +139,7 @@ alias week='date +%V'
 alias timer='echo;echo "--> Timer started. Stop with Ctrl-D." && date && time cat && date'
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias apple_update='echo;echo "--> system softwareupdate --background"; sudo softwareupdate -i -a --background'
+alias apple_update='sudo -v; echo;echo "--> system softwareupdate --background"; softwareupdate -i -a --background'
 alias apple-update="apple_update"
 
 alias update_apple="apple_update"
@@ -153,48 +153,50 @@ alias brew-update="brew_update"
 alias update_brew="brew_update"
 alias update-brew="brew_update"
 
-alias node-latest='set-package-permissions; echo;echo "--> npm install @latest..."; sudo npm install npm@latest -gd --save; echo;echo "--> npm dedupe..."; npm -gd ddp; echo;echo "--> npm rebuild..."; npm -gd rb; echo;echo "--> npm doctor..."; npm doctor; echo;echo "--> npm check..."; npm-check -gua; npm config set save-exact = true; refresh'
+alias node-latest='sudo -v; set-package-permissions; echo;echo "--> npm install @latest..."; npm install npm@latest -gd --save; echo;echo "--> npm dedupe..."; npm -gd ddp; echo;echo "--> npm rebuild..."; npm -gd rb; echo;echo "--> npm doctor..."; npm doctor; echo;echo "--> npm check..."; npm-check -gu'
 
-alias npm-check='echo;echo "--> npm check..."; npm-check -gua'
+alias npm-check='echo;echo "--> npm check..."; npm-check -gu'
 alias npm-cleanup='echo;echo "--> npm dedupe..."; npm dedupe -gdl; echo;echo "--> npm rebuild..."; npm rebuild -gd; echo;echo "--> npm doctor..."; npm doctor; echo;echo "--> npm outdated..."; npm -gdl outdated'
-alias npm_update='set-package-permissions; echo;echo "--> npm install @next..."; sudo npm install npm@next -gdl --save; echo;echo "--> npm update..."; npm update -gd; npm-check; npm-cleanup; npm config set save-exact = true; refresh'
+alias npm_update='set-package-permissions; echo;echo "--> npm install @next..."; npm install npm@next -gdl --save; echo;echo "--> npm update..."; npm update -gd; npm-check; npm-cleanup; refresh'
 alias npm-update="npm_update"
 
 alias update_npm="update_npm"
 alias update-npm="update_npm"
 
-alias gem-check='echo;echo "--> gem check..."; sudo gem check --doctor'
-alias gem-cleanup='echo;echo "--> gem cleanup..."; sudo gem cleanup'
-alias gem_update='set-package-permissions; echo;echo "--> gem update..."; sudo gem update --system -V --no-rdoc --no-ri; sudo gem update -V --no-rdoc --no-ri; gem-check; gem-cleanup; refresh'
-alias gem-update-gem="gem_update"
+alias gem-check='echo;echo "--> gem check..."; gem check --doctor'
+alias gem-cleanup='echo;echo "--> gem cleanup..."; gem cleanup'
+alias gem_update='set-package-permissions; echo;echo "--> gem update..."; gem update --system -V --no-rdoc --no-ri; gem update -V --no-rdoc --no-ri; gem-check; gem-cleanup; refresh'
+alias gem-update="gem_update"
 
 alias update_gem="gem_update"
 alias update-gem="gem_update"
 
-alias update='echo;echo "--> full update..."; apple_update; brew_update; npm_update; gem_update; echo;echo "completed update |<--"; refresh'
+alias update='sudo -v; echo;echo "--> full update..."; apple_update; brew_update; npm_update; gem_update; echo;echo "completed update |<--"; refresh'
 
-alias dep-check="npm outdated; npm outdated > npm_outdated.log; salita > pack_outdated.log; salita; npm test > test.log; npm-check > ./npm_check.log; npm-check"
-alias dep-check-u="npm outdated; npm outdated >> npm_outdated.log; salita --update >> pack_outdated.log; salita --update; npm test >> test.log; npm-check -u >> ./npm_check.log; npm-check -u"
+alias dep-check="npm outdated | tee ./npm_outdated.log; salita | tee -a ./pack_outdated.log; npm test | tee ./test.log; npm-check | tee ./npm_check.log"
+alias dep-check-u="npm outdated | tee ./npm_outdated.log; salita --update | tee -a ./pack_outdated.log; npm test | ./test.log; npm-check -u | tee ./npm_check.log"
 
 #refresh  source, dependencies (salita reqd), npm packages
-alias rl="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check"
-alias rl-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm-check"
+alias rl="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm-check"
+alias rl-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm-check"
 
-alias srl="sudo gpu; sudo salita --update; sudo npm dedupe; sudo npm up -d; sudo npm i ./ -d; sudo npm up -d; sudo npm i ./ -d; npm ls; npm-check"
+alias srl="sudo -v; gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm-check"
 
-alias rldd="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
-alias rldd-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
+alias rldd="gpu; salita --update; npm dedupe; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
+alias rldd-g="salita --update; npm dedupe; npm up -d; npm i ./ -d; npm dedupe; npm rebuild; npm-check -u"
 
 # # local Dynodb + Data
-# alias dyno-mem="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory; cd-src"
-# alias dyno-db="cd /Users/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -dbPath /Users/dev/utils/dyno_db_data; cd-src"
+# access: --> aws dynamodb list-tables --endpoint-url http://localhost:8000
+# aurora db-dump: --> mysqldump --databases myDB -v -h mydbInst.xxxxxx.us-east-1.rds.amazonaws.com -u myuser -P 3306 -p > rdsmyDB.sql
+alias dyno-mem="cd /Volumes/Data/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory; cd-src"
+alias dyno-db="cd /Volumes/Data/dev/utils/dynamodb; java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -dbPath /Volumes/Data/dev/utils/dyno_db_data -sharedDb; cd-src"
 
 alias dropsleep='sudo rm -rf /private/var/vm/sleepimage; reload'
 alias checksleep='ls -la /private/var/vm/; ll -al /var/vm/sleepimage'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en0"
+alias local-ip="ipconfig getifaddr en0"
 alias myip="ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print \$2}'"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 alias dig="dig +nocmd any +multiline +noall +answer"
