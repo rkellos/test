@@ -1,23 +1,16 @@
 #!/bin/bash
 
 #  ---------------------------------------------------------------------------
+#  Exports - path configs
 #  ---------------------------------------------------------------------------
 
 HOMEBREW_NO_ANALYTICS=1
 
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-  . `brew --prefix`/etc/bash_completion
-fi
-
-if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
-  eval "$(rbenv init -)"
-fi
-
 # Load nvm
 export NVM_DIR="$HOME/.nvm"
 
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-npm config delete prefix
+#creds path
+export CREDS_DIR="$HOME/.creds"
 
 # Load Android sdk
 export ANDROID_SDK_ROOT="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
@@ -30,12 +23,12 @@ export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" c
 
 #   Set Paths
 #   ------------------------------------------------------------
-  export PATH="~/.rbenv:/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+  export PATH="/Users/${USER}/.rbenv:/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 #   Set Default Editor (change 'Nano' to the editor of your choice)
 #   ------------------------------------------------------------
   #export EDITOR=/usr/bin/nano
-  export EDITOR="code"
+  export EDITOR="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
 
 #   Set default blocksize for ls, df, du
 #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
@@ -50,7 +43,7 @@ export DEVELOPER_DIR="/Volumes/Data/Applications/Xcode.app/Contents/Developer" c
   export CLICOLOR_FORCE=1
   export LSCOLORS=GxFxCxDxBxegedabagaced
 
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+test -e "${HOME}/.iterm2/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2/.iterm2_shell_integration.bash"
 export ANDROID_HOME="/Users/${USER}/Library/Developer/Xamarin/android-sdk-macosx"
 export JAVA_HOME="`/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java_home`"
 
@@ -77,15 +70,34 @@ export GOPATH="$HOME/go"
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 
+# ncurses
+#For compilers to find this software you may need to set:
+#launchctl setenv LDFLAGS,
+export LDFLAGS="-L/usr/local/opt/ncurses/lib"
+#launchctl setenv CPPFLAGS,
+export CPPFLAGS="-I/usr/local/opt/ncurses/include"
+#For pkg-config to find this software you may need to set:
+#launchctl setenv PKG_CONFIG_PATH, 
+export PKG_CONFIG_PATH="/usr/local/opt/ncurses/lib/pkgconfig"
+
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
 
+source ~/.creds/.credentials
 source ~/.bash_prompt
 source ~/.bash_aliases
 source $HOME/bash_completion.d/gradle-completion.bash
 source ~/.shell_functions
 source ~/.gitattributes
+
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
+
+if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
+  eval "$(rbenv init -)"
+fi
 
 for file in ~/.{bash_prompt}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
@@ -95,25 +107,3 @@ unset file;
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
-
-launchctl setenv process.env.JWT_PUBLIC_KEY, "-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEAsSXMR/u87eZf8lorRGgTAz50BBrkG4QwirSWXcPqhw/uDljRzelL
-fUaB3ZGIMbpCD/ue7o9alzgPdfa55ibBdVUR5DOPP+FZGiraQr5xGS8YwhF1gbbz
-MkeDM/DxrZEeUPQhYJk2XzvcWfCU4XdcAD5PYCujFr124zIvrWP60WR2/wileRsZ
-vdYPIZVSC5J2rk4o3T9PrNxM0fFHcmsiBMYECpcndrcT1uVc1FUx1TblQO7g/v8e
-cGUwAX/zBzZrWdAfZbSx5WV9kXm8eDpn+k9uGF5HigI36BCswfL/EauxzLrgN50L
-bS/V2K/ouXVPjhWP2Oeh9qGdQ8gI+c6uDQIDAQAB
------END RSA PUBLIC KEY-----"
-
-launchctl setenv process.env.JWT_ISSUER, "staging"
-launchctl setenv process.env.JWT_AUDIENCE, "consumer"
-
-launchctl setenv process.env.AUTH_HEADER_KEY, ""
-launchctl setenv process.env.AUTH_HEADER_VALUE, ""
-
-# ncurses
-#For compilers to find this software you may need to set:
-launchctl setenv LDFLAGS, "-L/usr/local/opt/ncurses/lib"
-launchctl setenv CPPFLAGS, "-I/usr/local/opt/ncurses/include"
-#For pkg-config to find this software you may need to set:
-launchctl setenv PKG_CONFIG_PATH, "/usr/local/opt/ncurses/lib/pkgconfig"

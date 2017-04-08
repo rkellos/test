@@ -6,6 +6,11 @@
 
 # Aliases - ln -fs /Users/${USER}/dotfiles-master/shell/bash_aliases .bash_aliases
 
+#be sure things are loaded
+[ -s "$CREDS_DIR/.credentials" ] && \. "$CREDS_DIR/.credentials"  # This loads creds
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+npm config delete prefix
+
 # Be nice
 alias htop='sudo htop'
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
@@ -20,7 +25,7 @@ alias e="$EDITOR"
 alias v="vim"
 alias cask='brew cask' # i <3 u cask
 
-alias v-code='/Volumes/Data/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
+alias v-code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome' # Google Chrome
 
 alias edit='subl '                          # edit:         Opens any file in sublime editor
@@ -88,7 +93,7 @@ alias cic='set completion-ignore-case On'   # cic:          Make tab-completion 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload-anyshell='exec $SHELL -l'
 alias refresh='source ~/.bash_profile'
-alias reload='cls; reload-anyshell; refresh'
+alias reload='cls; refresh'
 
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
@@ -139,7 +144,7 @@ alias week='date +%V'
 alias timer='echo;echo "--> Timer started. Stop with Ctrl-D." && date && time cat && date'
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias apple_update='sudo -v; echo;echo "--> system softwareupdate --background"; softwareupdate -i -a --background'
+alias apple_update='echo;echo "--> system softwareupdate --background"; sudo softwareupdate -i -a --background'
 alias apple-update="apple_update"
 
 alias update_apple="apple_update"
