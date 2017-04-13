@@ -54,9 +54,11 @@ PATH="$PATH:$ANDROID_HOME/platform-tools"
 PATH="$PATH:$ANDROID_HOME/tools"
 export PATH
 
-export THEOS="/Volumes/Data/src/UDIDGenerator/theos"
+#export THEOS="/Volumes/Data/src/UDIDGenerator/theos"
 
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+#export PATH="$HOME/.fastlane/bin:$PATH"
 
 # ApacheAnt
 export ANT_HOME="/usr/local/ant"
@@ -84,12 +86,12 @@ export PKG_CONFIG_PATH="/usr/local/opt/ncurses/lib/pkgconfig"
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
 
-source ~/.creds/.credentials
-source ~/.bash_prompt
-source ~/.bash_aliases
+source $HOME/.creds/.credentials
+source $HOME/.bash_prompt
+source $HOME/.bash_aliases
 source $HOME/bash_completion.d/gradle-completion.bash
-source ~/.shell_functions
-source ~/.gitattributes
+source $HOME/.shell_functions
+source $HOME/.gitattributes
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
@@ -99,11 +101,12 @@ if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
   eval "$(rbenv init -)"
 fi
 
-for file in ~/.{bash_prompt}; do
+for file in $HOME/.{bash_prompt}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
 
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+if [ -f $HOME/.bash_aliases ]; then
+  . $HOME/.bash_aliases
 fi
+eval $(/usr/libexec/path_helper -s)
