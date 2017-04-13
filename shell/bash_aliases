@@ -165,8 +165,8 @@ alias npm-cleanup='echo;echo "--> npm dedupe..."; npm dedupe -gdl; echo;echo "--
 alias npm_update='set-package-permissions; echo;echo "--> npm install @next..."; npm install npm@next -gdl --save; echo;echo "--> npm update..."; npm update -gd; npm-check; npm-cleanup; refresh'
 alias npm-update="npm_update"
 
-alias update_npm="update_npm"
-alias update-npm="update_npm"
+alias update_npm="npm_update"
+alias update-npm="npm_update"
 
 alias gem-check='echo;echo "--> gem check..."; gem check --doctor'
 alias gem-cleanup='echo;echo "--> gem cleanup..."; gem cleanup'
