@@ -1,0 +1,20 @@
+Repo: https://github.com/cbdr/consumer-email-subscriptions
+
+Tasks:
+# add subscription_model.js to the ./lib/models folder and create a model that matched the field names in the email.email_subscription table in Aurora
+# add subscription_service.js to the ./lib/services folder and add a setEmailSubscription method that takes the request and a subscription (model) and inserts it into the email.email_subscription table (using mysql npm?)
+# add email_controller.js to controllers folder if it does not already exist
+# add setEmailSubscription function to the email_controller.js that calls the setEmailSubscription service if a valid model is posted and it is a valid request
+# add a .post route to ./routes/application_routes.js that calls the email_controller setEmailSubscription if a valid AUTH_HEADER_KEY is provided.
+# deploy your changes to staging and production
+# add unit tests for the controller, route and service using mocha
+
+Acceptance Criteria:
+# commit and PR your changes after each step so that others that will be adding other methods to the same files for other routes can work
+# Developer should be able to demonstrate a call to both staging and production with a valid model and show that the new rows exist in the corresponding table and a 200 status code is returned
+# Developer should be able to demonstrate a 401 error being thrown in staging and production if the post does not include the correct security auth header values. 
+# Developer should be able to demonstrate a 400 error being thrown in staging and production if an invalid json request is posted (i.e., doesn't match the model)
+# Developer should be able to demonstrate a 500 error being thrown in staging and production
+# unit tests are written that at least cover the acceptance criteria paths referenced above
+
+See https://github.com/cbdr/consumer-iterable for examples of how to do services, controllers and routes (not sure the model is the best example, however)
